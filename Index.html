@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract Alphanumeric Codes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Extract 5-Digit Alphanumeric Codes</h1>
+        <textarea id="inputText" rows="10" cols="50" placeholder="Enter your text here..."></textarea>
+        <br>
+        <button onclick="extractCodes()">Extract Codes</button>
+        <div class="result-box" id="result"></div>
+    </div>
+
+    <script>
+        function extractCodes() {
+            const text = document.getElementById('inputText').value;
+            const regex = /\b[A-Z0-9]{5}\b/g;
+            const matches = text.match(regex);
+            const resultBox = document.getElementById('result');
+            resultBox.innerHTML = ''; // Clear previous results
+
+            if (matches) {
+                for (let i = 0; i < matches.length; i += 5) {
+                    const line = matches.slice(i, i + 5).join(',');
+                    const lineDiv = document.createElement('div');
+                    lineDiv.className = 'line';
+
+                    const lineText = document.createElement('span');
+                    lineText.textContent = line;
+                    lineDiv.appendChild(lineText);
+
+                    const copyButton = document.createElement('button');
+                    copyButton.textContent = 'Copy';
+                    copyButton.className = 'small-button';
+                    copyButton.onclick = function() {
+                        navigator.clipboard.writeText(line);
+                        alert('Text copied: ' + line);
+                    };
+                    lineDiv.appendChild(copyButton);
+
+                    resultBox.appendChild(lineDiv);
+                }
+            } else {
+                resultBox.innerHTML = 'No 5-digit alphanumeric codes found.';
+            }
+        }
+    </script>
+</body>
+</html>
