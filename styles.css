@@ -61,15 +61,14 @@ button:hover {
 }
 
 .small-button {
-    
     background-color: #28a745;
     color: #fff;
     border: none;
     border-radius: 4px;
-    width : 200px;
-    padding: 3px 6px; /* Smaller padding */
+    width: 200px;
+    padding: 3px 6px;
     cursor: pointer;
-    font-size: 16px; /* Smaller font size */
+    font-size: 16px;
 }
 
 .small-button:hover {

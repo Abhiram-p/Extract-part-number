@@ -18,12 +18,21 @@
     <script>
         function extractCodes() {
             const text = document.getElementById('inputText').value;
+
+            // Match exactly 5 alphanumeric uppercase characters
             const regex = /\b[A-Z0-9]{5}\b/g;
-            const matches = text.match(regex);
+            let matches = text.match(regex) || [];
+
+            // Exclusion list for words that are not real part numbers
+            const blacklist = ["PARTS", "COVER", "BEZEL", "BOARD", "CHASS", "FRAME", "PANEL"];
+
+            // Filter out blacklisted words
+            matches = matches.filter(code => !blacklist.includes(code));
+
             const resultBox = document.getElementById('result');
             resultBox.innerHTML = ''; // Clear previous results
 
-            if (matches) {
+            if (matches.length > 0) {
                 for (let i = 0; i < matches.length; i += 5) {
                     const line = matches.slice(i, i + 5).join(',');
                     const lineDiv = document.createElement('div');
@@ -51,5 +60,3 @@
     </script>
 </body>
 </html>
-
-//Test: BILLABLE HOLD:XWT2F,MB,MB_REPAIR,Damage - CID - Physical (Drop, Crushed, Broke);442PH,HEATSINK,CID - Functional,Damage - CID - Liquid spill (partial or full submerge);P6FH5,RAM,Functional,Missing Part;4TW9C,MECHANICAL PARTS,Functional,Missing Part;H87C2,MECHANICAL PARTS,IW,Missing Part;DWT74,COVER BASE,Functional,Damage - CID - Physical (Drop, Crushed, Broke);P6FH5,RAM,Functional,Missing Part
