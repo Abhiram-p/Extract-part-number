@@ -24,7 +24,7 @@
             let matches = text.match(regex) || [];
 
             // Exclusion list for words that are not real part numbers
-            const blacklist = ["PARTS", "COVER", "BEZEL", "BOARD", "CHASS", "FRAME", "PANEL", "CABLE"];
+            const blacklist = ["PARTS", "COVER", "BEZEL", "BOARD", "CHASS", "FRAME", "PANEL", "CABLE", "MOUSE", "CORDS"];
 
             // Filter out blacklisted words
             matches = matches.filter(code => !blacklist.includes(code));
@@ -60,5 +60,6 @@
     </script>
 </body>
 </html>
+
 
 
