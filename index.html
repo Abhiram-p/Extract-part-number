@@ -17,37 +17,64 @@
 
     <script>
         function extractCodes() {
-            const text = document.getElementById('inputText').value;
+            const inputTextElement = document.getElementById('inputText');
+            let text = inputTextElement.value;
 
-            // Match exactly 5 alphanumeric uppercase characters
-            const regex = /\b[A-Z0-9]{5}\b/g;
-            let matches = text.match(regex) || [];
-
-            // Exclusion list for words that are not real part numbers
-            const blacklist = ["PARTS", "COVER", "BEZEL", "BOARD", "CHASS", "FRAME", "PANEL", "CABLE", "MOUSE", "CORDS"];
-
-            // Filter out blacklisted words
-            matches = matches.filter(code => !blacklist.includes(code));
+            // Auto-format the input string
+            const formattedText = text.split(';')
+                                      .map(s => s.trim())
+                                      .filter(Boolean)
+                                      .join('; ');
+            inputTextElement.value = formattedText;
+            text = formattedText;
 
             const resultBox = document.getElementById('result');
             resultBox.innerHTML = ''; // Clear previous results
 
-            if (matches.length > 0) {
-                for (let i = 0; i < matches.length; i += 5) {
-                    const line = matches.slice(i, i + 5).join(',');
+            const parts = text.split(';').map(s => s.trim());
+            const regex = /\b[A-Z0-9]{5}\b/g;
+            const blacklist = ["PARTS", "COVER", "BEZEL", "BOARD", "CHASS", "FRAME", "PANEL", "CABLE", "MOUSE", "CORDS"];
+
+            let allMatches = [];
+            parts.forEach(part => {
+                if (!part) return; // Skip empty parts
+                let matches = part.match(regex) || [];
+                matches = matches.filter(code => !blacklist.includes(code));
+
+                if (matches.length > 0) {
+                    const highlight = part.toUpperCase().includes('IW');
+                    matches.forEach(match => {
+                        allMatches.push({code: match, highlight: highlight});
+                    });
+                }
+            });
+
+
+            if (allMatches.length > 0) {
+                for (let i = 0; i < allMatches.length; i += 5) {
+                    const lineMatches = allMatches.slice(i, i + 5);
                     const lineDiv = document.createElement('div');
                     lineDiv.className = 'line';
 
                     const lineText = document.createElement('span');
-                    lineText.textContent = line;
+
+                    // Create the inner HTML with spans for highlighting
+                    lineText.innerHTML = lineMatches.map(match => {
+                        if (match.highlight) {
+                            return `<span class="highlight-green">${match.code}</span>`;
+                        }
+                        return match.code;
+                    }).join(',');
+
                     lineDiv.appendChild(lineText);
 
                     const copyButton = document.createElement('button');
                     copyButton.textContent = 'Copy';
                     copyButton.className = 'small-button';
+                    const lineForCopy = lineMatches.map(m => m.code).join(',');
                     copyButton.onclick = function() {
-                        navigator.clipboard.writeText(line);
-                        alert('Text copied: ' + line);
+                        navigator.clipboard.writeText(lineForCopy);
+                        alert('Text copied: ' + lineForCopy);
                     };
                     lineDiv.appendChild(copyButton);
 
@@ -60,6 +87,3 @@
     </script>
 </body>
 </html>
-
-
-
