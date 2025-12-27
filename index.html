@@ -24,7 +24,7 @@
             const formattedText = text.split(';')
                                       .map(s => s.trim())
                                       .filter(Boolean)
-                                      .join('; ');
+                                      .join(';\n');
             inputTextElement.value = formattedText;
             text = formattedText;
 
