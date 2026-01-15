@@ -35,6 +35,7 @@
             const regex = /\b[A-Z0-9]{5}\b/g;
             const blacklist = ["PARTS", "COVER", "BEZEL", "BOARD", "CHASS", "FRAME", "PANEL", "CABLE", "MOUSE", "CORDS, "PLATE""];
 
+
             let allMatches = [];
             parts.forEach(part => {
                 if (!part) return; // Skip empty parts
